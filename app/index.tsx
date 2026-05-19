@@ -13,30 +13,31 @@ const UI_COLORS = {
   accentBlue: '#0284C7',    
   accentPurple: '#7C3AED',  
   accentOrange: '#EA580C',  
+  accentYellow: '#EAB308',  // Color accent for Micro-Lending
 };
 
 const UTILITY_MODULES = [
   {
-    id: 'gadgets',
-    name: 'Smart Gadgets',
-    tagline: 'Budget Matcher',
-    route: 'gadgets', 
-    color: UI_COLORS.accentGreen,
-    icon: '📱',
-  },
-  {
     id: 'banks',
     name: 'High-Yield Savings',
     tagline: 'Yield Comparator',
-    route: 'banks', 
+    route: '/banks', 
     color: UI_COLORS.accentBlue,
     icon: '💼',
+  },
+  {
+    id: 'gadgets',
+    name: 'Smart Gadgets',
+    tagline: 'Budget Matcher',
+    route: '/gadgets', 
+    color: UI_COLORS.accentGreen,
+    icon: '📱',
   },
   {
     id: 'auto',
     name: 'Auto Loans',
     tagline: 'True Net Cost',
-    route: 'auto',
+    route: '/auto',
     color: UI_COLORS.accentPurple,
     icon: '🚗',
   },
@@ -44,17 +45,24 @@ const UTILITY_MODULES = [
     id: 'realestate',
     name: 'Real Estate',
     tagline: 'Affordability Index',
-    route: 'realestate',
+    route: '/realestate',
     color: UI_COLORS.accentOrange,
     icon: '🏠',
+  },
+  {
+    id: 'microlending',
+    name: 'Micro-Lending',
+    tagline: 'Sari-Sari / Personal',
+    route: '/microlending', // New Route Added!
+    color: UI_COLORS.accentYellow,
+    icon: '🤝',
   },
 ];
 
 export default function DashboardScreen() {
-  const [householdIncome, setHouseholdIncome] = useState(1000000); // Default to 1M on load now
+  const [householdIncome, setHouseholdIncome] = useState(1000000); 
   const router = useRouter();
 
-  // 💰 Expanded preset array up to 1,000,000
   const incomePresets = [45000, 100000, 500000, 1000000];
 
   const formatCurrency = (val: number) => {
@@ -66,7 +74,7 @@ export default function DashboardScreen() {
       style={{ flex: 1, backgroundColor: UI_COLORS.bg }}
       contentContainerStyle={{ padding: 20, paddingTop: 50 }}
     >
-      {/* Top Branding Header Line */}
+      {/* Top Branding Header */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text style={{ fontSize: 24, fontWeight: '900', color: '#FFFFFF', letterSpacing: -0.5 }}>
@@ -98,7 +106,6 @@ export default function DashboardScreen() {
           Select profile base target tier:
         </Text>
 
-        {/* Dynamic wrapping grid buttons */}
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {incomePresets.map((val) => (
             <Pressable
@@ -123,7 +130,7 @@ export default function DashboardScreen() {
         </View>
       </View>
 
-      {/* Financial Calculators Navigation Matrix Grid */}
+      {/* Financial Calculators Grid */}
       <Text style={{ fontSize: 14, fontWeight: '700', color: UI_COLORS.textSecondary, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 14 }}>
         Financial Calculators
       </Text>
@@ -134,27 +141,29 @@ export default function DashboardScreen() {
             key={mod.id}
             onPress={() => router.push(mod.route)} 
             style={{
-              width: '47.5%',
+              width: mod.id === 'microlending' ? '100%' : '47.5%', // Micro-lending spans full width at bottom
               backgroundColor: UI_COLORS.surface,
               borderRadius: 18,
               padding: 16,
               borderWidth: 1,
               borderColor: UI_COLORS.border,
               justifyContent: 'space-between',
-              minHeight: 150,
+              minHeight: mod.id === 'microlending' ? 110 : 150,
             }}
           >
-            <View style={{ width: 42, height: 42, borderRadius: 12, backgroundColor: mod.color + '15', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: mod.color + '30' }}>
-              <Text style={{ fontSize: 20 }}>{mod.icon}</Text>
-            </View>
+            <View style={{ flexDirection: mod.id === 'microlending' ? 'row' : 'column', alignItems: 'center', gap: 12, width: '100%' }}>
+              <View style={{ width: 42, height: 42, borderRadius: 12, backgroundColor: mod.color + '15', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: mod.color + '30' }}>
+                <Text style={{ fontSize: 20 }}>{mod.icon}</Text>
+              </View>
 
-            <View style={{ marginTop: 16 }}>
-              <Text style={{ fontSize: 15, fontWeight: '700', color: UI_COLORS.textPrimary }}>
-                {mod.name}
-              </Text>
-              <Text style={{ fontSize: 12, color: UI_COLORS.textSecondary, marginTop: 2 }}>
-                {mod.tagline}
-              </Text>
+              <View style={{ marginTop: mod.id === 'microlending' ? 0 : 16, flex: 1 }}>
+                <Text style={{ fontSize: 15, fontWeight: '700', color: UI_COLORS.textPrimary }}>
+                  {mod.name}
+                </Text>
+                <Text style={{ fontSize: 12, color: UI_COLORS.textSecondary, marginTop: 2 }}>
+                  {mod.tagline}
+                </Text>
+              </View>
             </View>
 
             <View style={{ backgroundColor: mod.color, borderRadius: 8, paddingVertical: 6, alignItems: 'center', marginTop: 12 }}>
@@ -166,5 +175,3 @@ export default function DashboardScreen() {
     </ScrollView>
   );
 }
-
-              
