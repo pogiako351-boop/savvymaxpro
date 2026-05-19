@@ -25,7 +25,7 @@ const VEHICLE_DATA = [
     model: 'City 1.5 V SENSING', 
     price: 1028000, 
     category: 'Sedan', 
-    subcat: 'Subcompact Premium', 
+    subcat: 'Premium Subcompact', 
     icon: '🚗', 
     img: 'https://images.unbxd.io/autocars-production/1625732000_honda-city-exterior.png', 
     url: 'https://hondaphil.com/model/city' 
@@ -47,7 +47,7 @@ const VEHICLE_DATA = [
     model: 'Fortuner 2.4 V Diesel', 
     price: 1994000, 
     category: 'Midsize SUV', 
-    subcat: 'Midsize Body-on-Frame SUV', 
+    subcat: 'Midsize PPV SUV', 
     icon: '🚙', 
     img: 'https://images.unbxd.io/autocars-production/1625733300_toyota-fortuner-exterior.png', 
     url: 'https://toyota.com.ph/fortuner' 
@@ -57,7 +57,7 @@ const VEHICLE_DATA = [
     model: 'Montero Sport GLS', 
     price: 1828000, 
     category: 'Midsize SUV', 
-    subcat: 'Midsize Tech SUV', 
+    subcat: 'Tech Advanced SUV', 
     icon: '🚙', 
     img: 'https://images.unbxd.io/autocars-production/1625733500_mitsubishi-montero-exterior.png', 
     url: 'https://www.mitsubishi-motors.com.ph/cars/montero-sport' 
@@ -67,7 +67,7 @@ const VEHICLE_DATA = [
     model: 'Everest Trend 2.0', 
     price: 1829000, 
     category: 'Midsize SUV', 
-    subcat: 'Next-Gen Comfort', 
+    subcat: 'Next-Gen Premium SUV', 
     icon: '🚙', 
     img: 'https://images.unbxd.io/autocars-production/1625733800_ford-everest-exterior.png', 
     url: 'https://www.ford.com.ph/suvs/everest/' 
@@ -79,7 +79,7 @@ const VEHICLE_DATA = [
     model: 'Ranger Wildtrak 4x2', 
     price: 1604000, 
     category: 'Pick-up', 
-    subcat: 'Sleek Lifestyle Truck', 
+    subcat: 'Lifestyle Utility Truck', 
     icon: '🛻', 
     img: 'https://images.unbxd.io/autocars-production/1625734100_ford-ranger-exterior.png', 
     url: 'https://www.ford.com.ph/trucks/ranger/' 
@@ -89,7 +89,7 @@ const VEHICLE_DATA = [
     model: 'Hilux 2.4 G 4x2 AT', 
     price: 1390000, 
     category: 'Pick-up', 
-    subcat: 'Utility Workhorse', 
+    subcat: 'Heavy Workhorse Truck', 
     icon: '🛻', 
     img: 'https://images.unbxd.io/autocars-production/1625734300_toyota-hilux-exterior.png', 
     url: 'https://toyota.com.ph/hilux' 
@@ -101,7 +101,7 @@ const VEHICLE_DATA = [
     model: 'Xpander GLS AT', 
     price: 1216000, 
     category: 'SUV / MPV', 
-    subcat: 'Compact MPV Crossover', 
+    subcat: '7-Seater MPV Crossover', 
     icon: '🚘', 
     img: 'https://images.unbxd.io/autocars-production/1625732500_mitsubishi-xpander-exterior.png', 
     url: 'https://www.mitsubishi-motors.com.ph/cars/xpander' 
@@ -111,7 +111,7 @@ const VEHICLE_DATA = [
     model: 'Hiace Commuter Deluxe', 
     price: 1899000, 
     category: 'Vans', 
-    subcat: 'Passenger Transit', 
+    subcat: 'High-Capacity Passenger Transit', 
     icon: '🚐', 
     img: 'https://images.unbxd.io/autocars-production/1625732900_toyota-hiace-exterior.png', 
     url: 'https://toyota.com.ph/hiace' 
@@ -121,14 +121,18 @@ const VEHICLE_DATA = [
 export default function AutoScreen() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All');
-  const [selectedTerm, setSelectedTerm] = useState<number>(12);
+  const [selectedTerm, setSelectedTerm] = useState<number>(60); // Defaulting directly to your new 60 Months plan
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   const categories = ['All', 'Sedan', 'Midsize SUV', 'Pick-up', 'SUV / MPV', 'Vans'];
-  const terms = [12, 24, 36, 48];
+  const terms = [12, 24, 36, 48, 60]; // Included the new 60 Mos entry
 
   const calculateMonthly = (principal: number, termMonths: number, type: 'Bank' | 'InHouse') => {
-    const annualRate = type === 'Bank' ? 0.07 : 0.15;
+    // Dynamic market interest scaling based on longer terms
+    let annualRate = type === 'Bank' ? 0.07 : 0.15;
+    if (termMonths === 60) {
+      annualRate = type === 'Bank' ? 0.075 : 0.165; // Adjusts slightly higher for 5-year risk curves
+    }
     const totalInterest = principal * annualRate * (termMonths / 12);
     return Math.round((principal + totalInterest) / termMonths);
   };
@@ -148,28 +152,29 @@ export default function AutoScreen() {
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.purple }}>
             <Text style={{ color: UI_COLORS.purple, fontSize: 13, fontWeight: '700' }}>🏦 Bank Financing</Text>
-            <Text style={{ color: '#FFF', fontSize: 11, marginTop: 4 }}>• Interest: <Text style={{ color: UI_COLORS.emerald, fontWeight: '600' }}>~7.0% p.a.</Text></Text>
+            <Text style={{ color: '#FFF', fontSize: 11, marginTop: 4 }}>• Interest: <Text style={{ color: UI_COLORS.emerald, fontWeight: '600' }}>~7.0% - 7.5%</Text></Text>
             <Text style={{ color: '#FFF', fontSize: 11 }}>• Downpayment: <Text style={{ fontWeight: '600' }}>20%</Text></Text>
           </View>
           <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.orange }}>
             <Text style={{ color: UI_COLORS.orange, fontSize: 13, fontWeight: '700' }}>🏠 In-House Dealer</Text>
-            <Text style={{ color: '#FFF', fontSize: 11, marginTop: 4 }}>• Interest: <Text style={{ color: '#EF4444', fontWeight: '600' }}>~15.0% p.a.</Text></Text>
-            <Text style={{ color: '#FFF', fontSize: 11 }}>• Downpayment: <Text style={{ fontWeight: '600' }}>15% Low Promo</Text></Text>
+            <Text style={{ color: '#FFF', fontSize: 11, marginTop: 4 }}>• Interest: <Text style={{ color: '#EF4444', fontWeight: '600' }}>~15% - 16.5%</Text></Text>
+            <Text style={{ color: '#FFF', fontSize: 11 }}>• Downpayment: <Text style={{ fontWeight: '600' }}>15% Promo</Text></Text>
           </View>
         </View>
       </View>
 
-      {/* TERM SELECTOR */}
+      {/* TERM SELECTOR WITH OPTIMIZED 5-COL WIDTH */}
       <Text style={{ color: UI_COLORS.textSecondary, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', marginBottom: 8 }}>Select Target Installment Term:</Text>
-      <View style={{ flexDirection: 'row', gap: 6, marginBottom: 20 }}>
+      <View style={{ flexDirection: 'row', gap: 5, marginBottom: 20 }}>
         {terms.map(t => (
           <Pressable key={t} onPress={() => setSelectedTerm(t)} style={{ flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: selectedTerm === t ? UI_COLORS.emerald : UI_COLORS.surface, alignItems: 'center', borderWidth: 1, borderColor: UI_COLORS.border }}>
-            <Text style={{ color: '#FFF', fontSize: 13, fontWeight: '700' }}>{t} Mos</Text>
+            <Text style={{ color: '#FFF', fontSize: 11, fontWeight: '700' }}>{t} Mos</Text>
           </Pressable>
         ))}
       </View>
 
-      {/* CATEGORY FILTER */}
+      {/* SEGMENT CATEGORY SELECTOR */}
+      <Text style={{ color: UI_COLORS.textSecondary, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', marginBottom: 8 }}>Filter Vehicle Class:</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20, maxHeight: 45 }}>
         {categories.map(cat => (
           <Pressable key={cat} onPress={() => setActiveCategory(cat)} style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: activeCategory === cat ? UI_COLORS.purple : UI_COLORS.surface, marginRight: 8, borderWidth: 1, borderColor: UI_COLORS.border }}>
@@ -197,19 +202,24 @@ export default function AutoScreen() {
             >
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <Text style={{ fontSize: 16 }}>{c.icon}</Text>
-                    <View style={{ backgroundColor: UI_COLORS.innerBg, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, borderWidth: 1, borderColor: UI_COLORS.border }}>
-                      <Text style={{ color: '#FFF', fontSize: 10, fontWeight: '700' }}>{c.brand.toUpperCase()}</Text>
+                  
+                  {/* CLEAN SUB-CATEGORY SUB-BADGE STRUCTURE */}
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <Text style={{ fontSize: 14 }}>{c.icon}</Text>
+                    <View style={{ backgroundColor: UI_COLORS.purple, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+                      <Text style={{ color: '#FFF', fontSize: 9, fontWeight: '800' }}>{c.brand.toUpperCase()}</Text>
                     </View>
-                    <Text style={{ color: UI_COLORS.textSecondary, fontSize: 11 }}>• {c.subcat}</Text>
+                    <View style={{ backgroundColor: UI_COLORS.innerBg, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, borderWidth: 1, borderColor: UI_COLORS.border }}>
+                      <Text style={{ color: UI_COLORS.textSecondary, fontSize: 9, fontWeight: '600' }}>{c.subcat}</Text>
+                    </View>
                   </View>
-                  <Text style={{ color: '#FFF', fontSize: 18, fontWeight: '700', marginTop: 6 }}>{c.model}</Text>
+                  
+                  <Text style={{ color: '#FFF', fontSize: 18, fontWeight: '700', marginTop: 8 }}>{c.model}</Text>
                 </View>
-                <Text style={{ color: UI_COLORS.purple, fontSize: 16, fontWeight: '800' }}>₱{c.price.toLocaleString()}</Text>
+                <Text style={{ color: UI_COLORS.purple, fontSize: 16, fontWeight: '800', marginTop: 2 }}>₱{c.price.toLocaleString()}</Text>
               </View>
 
-              {/* SAFE ACCURATE WEB IMAGE COMPONENT */}
+              {/* CLEAN WEB IMAGES VIEW */}
               {isExpanded && c.img && (
                 <Image 
                   source={{ uri: c.img }} 
@@ -218,17 +228,17 @@ export default function AutoScreen() {
                 />
               )}
 
-              <View style={{ flexDirection: 'row', gap: 8, marginTop: 12 }}>
+              <View style={{ flexDirection: 'row', gap: 8, marginTop: 14 }}>
                 <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.border }}>
-                  <Text style={{ color: UI_COLORS.purple, fontSize: 11, fontWeight: '700' }}>🏦 Bank Plan ({selectedTerm}m)</Text>
-                  <Text style={{ color: UI_COLORS.emerald, fontSize: 15, fontWeight: '800', marginVertical: 2 }}>₱{bankMonthly.toLocaleString()}<Text style={{ fontSize: 10, color: UI_COLORS.textSecondary }}>/mo</Text></Text>
-                  <Text style={{ color: UI_COLORS.textSecondary, fontSize: 10 }}>DP: ₱{Math.round(bankDp).toLocaleString()}</Text>
+                  <Text style={{ color: UI_COLORS.purple, fontSize: 10, fontWeight: '700' }}>🏦 Bank Plan ({selectedTerm}m)</Text>
+                  <Text style={{ color: UI_COLORS.emerald, fontSize: 15, fontWeight: '800', marginVertical: 3 }}>₱{bankMonthly.toLocaleString()}<Text style={{ fontSize: 10, color: UI_COLORS.textSecondary }}>/mo</Text></Text>
+                  <Text style={{ color: UI_COLORS.textSecondary, fontSize: 9 }}>DP: ₱{Math.round(bankDp).toLocaleString()}</Text>
                 </View>
 
                 <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.border }}>
-                  <Text style={{ color: UI_COLORS.orange, fontSize: 11, fontWeight: '700' }}>🏠 In-House ({selectedTerm}m)</Text>
-                  <Text style={{ color: UI_COLORS.emerald, fontSize: 15, fontWeight: '800', marginVertical: 2 }}>₱{inHouseMonthly.toLocaleString()}<Text style={{ fontSize: 10, color: UI_COLORS.textSecondary }}>/mo</Text></Text>
-                  <Text style={{ color: UI_COLORS.textSecondary, fontSize: 10 }}>DP: ₱{Math.round(inHouseDp).toLocaleString()}</Text>
+                  <Text style={{ color: UI_COLORS.orange, fontSize: 10, fontWeight: '700' }}>🏠 In-House ({selectedTerm}m)</Text>
+                  <Text style={{ color: UI_COLORS.emerald, fontSize: 15, fontWeight: '800', marginVertical: 3 }}>₱{inHouseMonthly.toLocaleString()}<Text style={{ fontSize: 10, color: UI_COLORS.textSecondary }}>/mo</Text></Text>
+                  <Text style={{ color: UI_COLORS.textSecondary, fontSize: 9 }}>DP: ₱{Math.round(inHouseDp).toLocaleString()}</Text>
                 </View>
               </View>
 
@@ -244,4 +254,3 @@ export default function AutoScreen() {
     </ScrollView>
   );
 }
-
