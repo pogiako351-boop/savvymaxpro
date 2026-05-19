@@ -1,165 +1,109 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable, Linking, Image } from 'react-native';
-import { useRouter } from 'expo-router';
-
-const UI_COLORS = {
-  bg: '#0F172A', surface: '#1E293B', innerBg: '#111827',
-  border: '#334155', textPrimary: '#F8FAFC', textSecondary: '#94A3B8',
-  purple: '#7C3AED', emerald: '#10B981', orange: '#EA580C', blue: '#0284C7'
-};
-
 const VEHICLE_DATA = [
   // SEDANS
-  { brand: 'Toyota', model: 'Vios 1.3 XLE CVT', price: 902000, category: 'Sedan', subcat: 'Subcompact', icon: '🚗', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-235-exterior.png?w=600', url: 'https://toyota.com.ph/vios' },
-  { brand: 'Honda', model: 'City 1.5 V SENSING', price: 1028000, category: 'Sedan', subcat: 'Subcompact Premium', icon: '🚗', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-193-exterior.png?w=600', url: 'https://hondaphil.com/model/city' },
-  { brand: 'Nissan', model: 'Almera 1.0 VE Turbo', price: 1059000, category: 'Sedan', subcat: 'Turbo Compact', icon: '🚗', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-131-exterior.png?w=600', url: 'https://www.nissan.ph/vehicles/new/almera.html' },
+  { 
+    brand: 'Toyota', 
+    model: 'Vios 1.3 XLE CVT', 
+    price: 902000, 
+    category: 'Sedan', 
+    subcat: 'Subcompact Sedan', 
+    icon: '🚗', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2020/07/27/toyota-vios-2020-white-1595837648.png', 
+    url: 'https://toyota.com.ph/vios' 
+  },
+  { 
+    brand: 'Honda', 
+    model: 'City 1.5 V SENSING', 
+    price: 1028000, 
+    category: 'Sedan', 
+    subcat: 'Subcompact Premium', 
+    icon: '🚗', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2023/07/13/honda-city-facelift-phil-1-1689233633.png', 
+    url: 'https://hondaphil.com/model/city' 
+  },
+  { 
+    brand: 'Nissan', 
+    model: 'Almera 1.0 VE Turbo', 
+    price: 1059000, 
+    category: 'Sedan', 
+    subcat: 'Turbo Compact', 
+    icon: '🚗', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2023/07/21/nissan-almera-facelift-ph-1-1689912061.png', 
+    url: 'https://www.nissan.ph/vehicles/new/almera.html' 
+  },
   
-  // MIDSIZE SUVs
-  { brand: 'Toyota', model: 'Fortuner 2.4 V Diesel', price: 1994000, category: 'Midsize SUV', subcat: '7-Seater Family Frame', icon: '🚙', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-138-exterior.png?w=600', url: 'https://toyota.com.ph/fortuner' },
-  { brand: 'Mitsubishi', model: 'Montero Sport GLS', price: 1828000, category: 'Midsize SUV', subcat: '7-Seater Tech Pack', icon: '🚙', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-234-exterior.png?w=600', url: 'https://www.mitsubishi-motors.com.ph/cars/montero-sport' },
-  { brand: 'Ford', model: 'Everest Trend 2.0', price: 1829000, category: 'Midsize SUV', subcat: 'Next-Gen Comfort', icon: '🚙', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-122-exterior.png?w=600', url: 'https://www.ford.com.ph/suvs/everest/' },
+  // MIDSIZE SUVs (Corrected Segment Name)
+  { 
+    brand: 'Toyota', 
+    model: 'Fortuner 2.4 V Diesel', 
+    price: 1994000, 
+    category: 'Midsize SUV', 
+    subcat: 'Midsize Body-on-Frame SUV', 
+    icon: '🚙', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2020/10/19/2020-toyota-fortuner-ph-spec-1603093259.png', 
+    url: 'https://toyota.com.ph/fortuner' 
+  },
+  { 
+    brand: 'Mitsubishi', 
+    model: 'Montero Sport GLS', 
+    price: 1828000, 
+    category: 'Midsize SUV', 
+    subcat: 'Midsize Tech SUV', 
+    icon: '🚙', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2024/03/19/2024-mitsubishi-montero-sport-thailand-1-1710819129.png', 
+    url: 'https://www.mitsubishi-motors.com.ph/cars/montero-sport' 
+  },
+  { 
+    brand: 'Ford', 
+    model: 'Everest Trend 2.0', 
+    price: 1829000, 
+    category: 'Midsize SUV', 
+    subcat: 'Next-Gen Comfort', 
+    icon: '🚙', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2022/03/01/2023-ford-everest-global-reveal-1-1646123490.png', 
+    url: 'https://www.ford.com.ph/suvs/everest/' 
+  },
 
   // PICK-UPS
-  { brand: 'Ford', model: 'Ranger Wildtrak 4x2', price: 1604000, category: 'Pick-up', subcat: 'Sleek Lifestyle Truck', icon: '🛻', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-121-exterior.png?w=600', url: 'https://www.ford.com.ph/trucks/ranger/' },
-  { brand: 'Toyota', model: 'Hilux 2.4 G 4x2 AT', price: 1390000, category: 'Pick-up', subcat: 'Utility Workhorse', icon: '🛻', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-139-exterior.png?w=600', url: 'https://toyota.com.ph/hilux' },
+  { 
+    brand: 'Ford', 
+    model: 'Ranger Wildtrak 4x2', 
+    price: 1604000, 
+    category: 'Pick-up', 
+    subcat: 'Sleek Lifestyle Truck', 
+    icon: '🛻', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2022/03/11/next-gen-ford-ranger-raptor-ph-1646968770.png', 
+    url: 'https://www.ford.com.ph/trucks/ranger/' 
+  },
+  { 
+    brand: 'Toyota', 
+    model: 'Hilux 2.4 G 4x2 AT', 
+    price: 1390000, 
+    category: 'Pick-up', 
+    subcat: 'Utility Workhorse', 
+    icon: '🛻', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2020/09/10/2020-toyota-hilux-philippines-1599723223.png', 
+    url: 'https://toyota.com.ph/hilux' 
+  },
 
-  // VANS / SUV-MPVs
-  { brand: 'Toyota', model: 'Hiace Commuter Deluxe', price: 1899000, category: 'Vans', subcat: 'Passenger Transit', icon: '🚐', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-141-exterior.png?w=600', url: 'https://toyota.com.ph/hiace' },
-  { brand: 'Mitsubishi', model: 'Xpander GLS AT', price: 1216000, category: 'SUV / MPV', subcat: 'Compact Crossover', icon: '🚘', img: 'https://cdn.static-car.com/ph/car-spec-sheet/images/model/car-220-exterior.png?w=600', url: 'https://www.mitsubishi-motors.com.ph/cars/xpander' }
+  // COMPACT MPVs & VANS
+  { 
+    brand: 'Mitsubishi', 
+    model: 'Xpander GLS AT', 
+    price: 1216000, 
+    category: 'SUV / MPV', 
+    subcat: 'Compact MPV Crossover', 
+    icon: '🚘', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2022/03/17/2022-mitsubishi-xpander-ph-1-1647492167.png', 
+    url: 'https://www.mitsubishi-motors.com.ph/cars/xpander' 
+  },
+  { 
+    brand: 'Toyota', 
+    model: 'Hiace Commuter Deluxe', 
+    price: 1899000, 
+    category: 'Vans', 
+    subcat: 'Passenger Transit', 
+    icon: '🚐', 
+    img: 'https://images.summitmedia-digital.com/topgear/images/2019/02/18/toyota-hiace-2019-03-1550482592.png', 
+    url: 'https://toyota.com.ph/hiace' 
+  }
 ];
-
-export default function AutoScreen() {
-  const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [selectedTerm, setSelectedTerm] = useState<number>(12); // Default to 12 Months
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
-
-  const categories = ['All', 'Sedan', 'Midsize SUV', 'Pick-up', 'SUV / MPV', 'Vans'];
-  const terms = [12, 24, 36, 48];
-
-  const calculateMonthly = (principal: number, termMonths: number, type: 'Bank' | 'InHouse') => {
-    const annualRate = type === 'Bank' ? 0.07 : 0.15; // 7% Bank vs 15% In-House Add-on
-    const totalInterest = principal * annualRate * (termMonths / 12);
-    return Math.round((principal + totalInterest) / termMonths);
-  };
-
-  return (
-    <ScrollView style={{ flex: 1, backgroundColor: UI_COLORS.bg }} contentContainerStyle={{ padding: 20, paddingTop: 40 }}>
-      {/* Return to Dashboard */}
-      <Pressable onPress={() => router.replace('/')} style={{ marginBottom: 16 }}>
-        <Text style={{ color: UI_COLORS.purple, fontWeight: '600' }}>← Dashboard</Text>
-      </Pressable>
-      
-      <Text style={{ fontSize: 24, fontWeight: '700', color: '#FFF', marginBottom: 4 }}>Auto Loans Matrix</Text>
-      <Text style={{ fontSize: 13, color: UI_COLORS.textSecondary, marginBottom: 20 }}>Compare financial structures side-by-side with official dealership data.</Text>
-
-      {/* 📊 VISUAL COMPARE MATRIX (SIDE-BY-SIDE SUMMARY) */}
-      <View style={{ backgroundColor: UI_COLORS.surface, borderRadius: 16, padding: 14, marginBottom: 20, borderWidth: 1, borderColor: UI_COLORS.border }}>
-        <Text style={{ color: '#FFF', fontSize: 12, fontWeight: '700', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5 }}>PH Interest Tier Reference</Text>
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.purple }}>
-            <Text style={{ color: UI_COLORS.purple, fontSize: 13, fontWeight: '700' }}>🏦 Bank Financing</Text>
-            <Text style={{ color: '#FFF', fontSize: 11, marginTop: 4 }}>• Interest: <Text style={{ color: UI_COLORS.emerald, fontWeight: '600' }}>~7.0% p.a.</Text></Text>
-            <Text style={{ color: '#FFF', fontSize: 11 }}>• Downpayment: <Text style={{ fontWeight: '600' }}>20%</Text></Text>
-          </View>
-          <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.orange }}>
-            <Text style={{ color: UI_COLORS.orange, fontSize: 13, fontWeight: '700' }}>🏠 In-House Dealer</Text>
-            <Text style={{ color: '#FFF', fontSize: 11, marginTop: 4 }}>• Interest: <Text style={{ color: '#EF4444', fontWeight: '600' }}>~15.0% p.a.</Text></Text>
-            <Text style={{ color: '#FFF', fontSize: 11 }}>• Downpayment: <Text style={{ fontWeight: '600' }}>15% Low Promo</Text></Text>
-          </View>
-        </View>
-      </View>
-
-      {/* REPAYMENT TERM SELECTOR ROW */}
-      <Text style={{ color: UI_COLORS.textSecondary, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', marginBottom: 8 }}>Select Target Installment Term:</Text>
-      <View style={{ flexDirection: 'row', gap: 6, marginBottom: 20 }}>
-        {terms.map(t => (
-          <Pressable key={t} onPress={() => setSelectedTerm(t)} style={{ flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: selectedTerm === t ? UI_COLORS.emerald : UI_COLORS.surface, alignItems: 'center', borderWidth: 1, borderColor: UI_COLORS.border }}>
-            <Text style={{ color: '#FFF', fontSize: 13, fontWeight: '700' }}>{t} Mos</Text>
-          </Pressable>
-        ))}
-      </View>
-
-      {/* BODY FILTER CAROUSEL */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20, maxHeight: 45 }}>
-        {categories.map(cat => (
-          <Pressable key={cat} onPress={() => setActiveCategory(cat)} style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: activeCategory === cat ? UI_COLORS.purple : UI_COLORS.surface, marginRight: 8, borderWidth: 1, borderColor: UI_COLORS.border }}>
-            <Text style={{ color: '#FFF', fontSize: 12, fontWeight: '600' }}>{cat}</Text>
-          </Pressable>
-        ))}
-      </ScrollView>
-
-      {/* VEHICLE DYNAMIC LOOP GENERATOR */}
-      <View style={{ gap: 14 }}>
-        {VEHICLE_DATA.filter(v => activeCategory === 'All' || v.category === activeCategory).map((c, i) => {
-          const isExpanded = expandedCard === i;
-
-          // Math for Bank (20% DP)
-          const bankDp = c.price * 0.20;
-          const bankMonthly = calculateMonthly(c.price - bankDp, selectedTerm, 'Bank');
-
-          // Math for In-House (15% DP)
-          const inHouseDp = c.price * 0.15;
-          const inHouseMonthly = calculateMonthly(c.price - inHouseDp, selectedTerm, 'InHouse');
-
-          return (
-            <Pressable 
-              key={i} 
-              onPress={() => setExpandedCard(isExpanded ? null : i)}
-              style={{ backgroundColor: UI_COLORS.surface, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: isExpanded ? UI_COLORS.purple : UI_COLORS.border }}
-            >
-              {/* Card Header and Icon Badges */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <Text style={{ fontSize: 16 }}>{c.icon}</Text>
-                    <View style={{ backgroundColor: UI_COLORS.innerBg, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, borderWidth: 1, borderColor: UI_COLORS.border }}>
-                      <Text style={{ color: '#FFF', fontSize: 10, fontWeight: '700' }}>{c.brand.toUpperCase()}</Text>
-                    </View>
-                    <Text style={{ color: UI_COLORS.textSecondary, fontSize: 11 }}>• {c.subcat}</Text>
-                  </View>
-                  <Text style={{ color: '#FFF', fontSize: 18, fontWeight: '700', marginTop: 6 }}>{c.model}</Text>
-                </View>
-                <Text style={{ color: UI_COLORS.purple, fontSize: 16, fontWeight: '800' }}>₱{c.price.toLocaleString()}</Text>
-              </View>
-
-              {/* DYNAMIC SHOWROOM IMAGE */}
-              {isExpanded && (
-                <Image 
-                  source={{ uri: c.img }} 
-                  style={{ width: '100%', height: 160, borderRadius: 12, marginTop: 12, backgroundColor: UI_COLORS.innerBg }} 
-                  resizeMode="contain" // Use contain to prevent cropping and keep aspect ratio clean
-                />
-              )}
-
-              {/* SIDE-BY-SIDE COMPARE OUTPUT MATRIX */}
-              <View style={{ flexDirection: 'row', gap: 8, marginTop: 12 }}>
-                {/* Bank Card Output */}
-                <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.border }}>
-                  <Text style={{ color: UI_COLORS.purple, fontSize: 11, fontWeight: '700' }}>🏦 Bank Plan ({selectedTerm}m)</Text>
-                  <Text style={{ color: UI_COLORS.emerald, fontSize: 15, fontWeight: '800', marginVertical: 2 }}>₱{bankMonthly.toLocaleString()}<Text style={{ fontSize: 10, color: UI_COLORS.textSecondary }}>/mo</Text></Text>
-                  <Text style={{ color: UI_COLORS.textSecondary, fontSize: 10 }}>DP: ₱{Math.round(bankDp).toLocaleString()}</Text>
-                </View>
-
-                {/* In-House Card Output */}
-                <View style={{ flex: 1, backgroundColor: UI_COLORS.innerBg, padding: 10, borderRadius: 10, borderWidth: 1, borderColor: UI_COLORS.border }}>
-                  <Text style={{ color: UI_COLORS.orange, fontSize: 11, fontWeight: '700' }}>🏠 In-House ({selectedTerm}m)</Text>
-                  <Text style={{ color: UI_COLORS.emerald, fontSize: 15, fontWeight: '800', marginVertical: 2 }}>₱{inHouseMonthly.toLocaleString()}<Text style={{ fontSize: 10, color: UI_COLORS.textSecondary }}>/mo</Text></Text>
-                  <Text style={{ color: UI_COLORS.textSecondary, fontSize: 10 }}>DP: ₱{Math.round(inHouseDp).toLocaleString()}</Text>
-                </View>
-              </View>
-
-              {/* Power External CTA Route Link */}
-              {isExpanded && (
-                <Pressable onPress={() => Linking.openURL(c.url).catch(() => {})} style={{ backgroundColor: UI_COLORS.purple, borderRadius: 10, paddingVertical: 11, alignItems: 'center', marginTop: 12 }}>
-                  <Text style={{ color: '#FFF', fontSize: 12, fontWeight: '700' }}>Get Official Dealer Quote Now →</Text>
-                </Pressable>
-              )}
-            </Pressable>
-          );
-        })}
-      </View>
-    </ScrollView>
-  );
-      }
-              
