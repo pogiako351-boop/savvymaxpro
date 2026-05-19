@@ -17,7 +17,7 @@ const VEHICLE_DATA = [
     category: 'Sedan', 
     subcat: 'Subcompact Sedan', 
     icon: '🚗', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/vios.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625732152_toyota-vios-exterior.png', 
     url: 'https://toyota.com.ph/vios' 
   },
   { 
@@ -27,7 +27,7 @@ const VEHICLE_DATA = [
     category: 'Sedan', 
     subcat: 'Subcompact Premium', 
     icon: '🚗', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/city.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625732000_honda-city-exterior.png', 
     url: 'https://hondaphil.com/model/city' 
   },
   { 
@@ -37,7 +37,7 @@ const VEHICLE_DATA = [
     category: 'Sedan', 
     subcat: 'Turbo Compact', 
     icon: '🚗', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/almera.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625731500_nissan-almera-exterior.png', 
     url: 'https://www.nissan.ph/vehicles/new/almera.html' 
   },
   
@@ -49,7 +49,7 @@ const VEHICLE_DATA = [
     category: 'Midsize SUV', 
     subcat: 'Midsize Body-on-Frame SUV', 
     icon: '🚙', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/fortuner.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625733300_toyota-fortuner-exterior.png', 
     url: 'https://toyota.com.ph/fortuner' 
   },
   { 
@@ -59,7 +59,7 @@ const VEHICLE_DATA = [
     category: 'Midsize SUV', 
     subcat: 'Midsize Tech SUV', 
     icon: '🚙', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/montero.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625733500_mitsubishi-montero-exterior.png', 
     url: 'https://www.mitsubishi-motors.com.ph/cars/montero-sport' 
   },
   { 
@@ -69,7 +69,7 @@ const VEHICLE_DATA = [
     category: 'Midsize SUV', 
     subcat: 'Next-Gen Comfort', 
     icon: '🚙', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/everest.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625733800_ford-everest-exterior.png', 
     url: 'https://www.ford.com.ph/suvs/everest/' 
   },
 
@@ -81,7 +81,7 @@ const VEHICLE_DATA = [
     category: 'Pick-up', 
     subcat: 'Sleek Lifestyle Truck', 
     icon: '🛻', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/ranger.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625734100_ford-ranger-exterior.png', 
     url: 'https://www.ford.com.ph/trucks/ranger/' 
   },
   { 
@@ -91,7 +91,7 @@ const VEHICLE_DATA = [
     category: 'Pick-up', 
     subcat: 'Utility Workhorse', 
     icon: '🛻', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/hilux.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625734300_toyota-hilux-exterior.png', 
     url: 'https://toyota.com.ph/hilux' 
   },
 
@@ -103,7 +103,7 @@ const VEHICLE_DATA = [
     category: 'SUV / MPV', 
     subcat: 'Compact MPV Crossover', 
     icon: '🚘', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/xpander.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625732500_mitsubishi-xpander-exterior.png', 
     url: 'https://www.mitsubishi-motors.com.ph/cars/xpander' 
   },
   { 
@@ -113,7 +113,7 @@ const VEHICLE_DATA = [
     category: 'Vans', 
     subcat: 'Passenger Transit', 
     icon: '🚐', 
-    img: 'https://bayanauto.com/wp-content/uploads/2021/11/hiace.jpg', 
+    img: 'https://images.unbxd.io/autocars-production/1625732900_toyota-hiace-exterior.png', 
     url: 'https://toyota.com.ph/hiace' 
   }
 ];
@@ -209,7 +209,7 @@ export default function AutoScreen() {
                 <Text style={{ color: UI_COLORS.purple, fontSize: 16, fontWeight: '800' }}>₱{c.price.toLocaleString()}</Text>
               </View>
 
-              {/* STABLE ERROR-GUARDED IMAGE CONTROLLER */}
+              {/* SAFE ACCURATE WEB IMAGE COMPONENT */}
               {isExpanded && c.img && (
                 <Image 
                   source={{ uri: c.img }} 
@@ -243,4 +243,5 @@ export default function AutoScreen() {
       </View>
     </ScrollView>
   );
-                          }
+}
+
